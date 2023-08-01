@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../features/copy_coordinate.dart';
 import '../features/map_view.dart';
 import '../permissions/location_permission.dart';
 import '../providers/location_provider.dart';
@@ -34,7 +35,9 @@ class MapGeolocatorPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
+            const CopyCoordinate(),
+            const SizedBox(height: 20),
             const MapView(),
           ],
         ),
