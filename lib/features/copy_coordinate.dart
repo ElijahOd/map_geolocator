@@ -1,45 +1,61 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/location_provider.dart';
 
-class CopyCoordinate extends StatefulWidget {
+class CopyCoordinate extends StatelessWidget {
   const CopyCoordinate({Key? key}) : super(key: key);
 
   @override
-  State<CopyCoordinate> createState() => _CopyCoordinateState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<_CopyCoordinateState>(
+      create: (_) => _CopyCoordinateState(),
+      child: Builder(builder: (context) {
+        final locationProvider = Provider.of<LocationProvider>(context);
+        final currentPosition = locationProvider.currentPosition;
+
+        if (currentPosition == null) {
+          return Container();
+        }
+
+        final copiedState = Provider.of<_CopyCoordinateState>(context);
+
+        return FloatingActionButton(
+          onPressed: () {
+            final coordinates =
+                '${locationProvider.currentPosition!.latitude}, ${locationProvider.currentPosition!.longitude}';
+
+            const snackBar = SnackBar(
+              content: Text('Coordinates copied!'),
+              duration: Duration(seconds: 1),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+            copiedState.copyCoordinates();
+            print(coordinates);
+          },
+          backgroundColor: copiedState.isCopied ? Colors.green : Colors.black87,
+          child: copiedState.isCopied
+              ? const Icon(Icons.check)
+              : const Icon(Icons.copy),
+        );
+      }),
+    );
+  }
 }
 
-class _CopyCoordinateState extends State<CopyCoordinate> {
+class _CopyCoordinateState extends ChangeNotifier {
   bool _copied = false;
 
-  @override
-  Widget build(BuildContext context) {
-    final locationProvider = Provider.of<LocationProvider>(context);
-    final currentPosition = locationProvider.currentPosition;
+  bool get isCopied => _copied;
 
-    if (currentPosition == null) {
-      return Container();
-    }
-
-    return FloatingActionButton(
-      onPressed: () {
-        final coordinates =
-            '${locationProvider.currentPosition!.latitude}, ${locationProvider.currentPosition!.longitude}';
-
-        const snackBar = SnackBar(
-          content: Text('Coordinates copied!'),
-          duration: Duration(seconds: 1),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-        setState(() {
-          _copied = true;
-          print(coordinates);
-        });
-      },
-      backgroundColor: Colors.black87,
-      child: _copied ? const Icon(Icons.check) : const Icon(Icons.copy),
-    );
+  void copyCoordinates() {
+    _copied = true;
+    notifyListeners();
+    Timer(const Duration(seconds: 2), () {
+      _copied = false;
+      notifyListeners();
+    });
   }
 }
