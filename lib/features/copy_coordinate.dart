@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/location_provider.dart';
+import '../cubit/location_cubit.dart';
 
 class CopyCoordinate extends StatelessWidget {
   const CopyCoordinate({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class CopyCoordinate extends StatelessWidget {
     return ChangeNotifierProvider<_CopyCoordinateState>(
       create: (_) => _CopyCoordinateState(),
       child: Builder(builder: (context) {
-        final locationProvider = Provider.of<LocationProvider>(context);
+        final locationProvider = Provider.of<LocationCubit>(context);
         final currentPosition = locationProvider.currentPosition;
 
         if (currentPosition == null) {
@@ -52,7 +52,7 @@ class _CopyCoordinateState extends ChangeNotifier {
   void copyCoordinates() {
     _copied = true;
     notifyListeners();
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 1), () {
       _copied = false;
       notifyListeners();
     });

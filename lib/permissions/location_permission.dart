@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../providers/location_provider.dart';
+import '../cubit/location_cubit.dart';
 
 Future<void> getLocationPermission(
-    BuildContext context, LocationProvider locationProvider) async {
+    BuildContext context, LocationCubit locationProvider) async {
   final permissionStatus = await Geolocator.checkPermission();
 
   if (permissionStatus == LocationPermission.denied) {
@@ -49,8 +49,7 @@ Future<void> getLocationPermission(
   }
 }
 
-Future<void> requestLocationPermission(
-    LocationProvider locationProvider) async {
+Future<void> requestLocationPermission(LocationCubit locationProvider) async {
   final permissionStatus = await Geolocator.requestPermission();
 
   if (permissionStatus == LocationPermission.whileInUse ||
