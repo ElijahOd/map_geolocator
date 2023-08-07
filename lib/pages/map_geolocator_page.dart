@@ -38,7 +38,7 @@ class MapGeolocatorPage extends StatelessWidget {
             const SizedBox(height: 20),
             const CopyCoordinate(),
             const SizedBox(height: 20),
-            const MapView(),
+            //const MapView(),
           ],
         ),
       ),
