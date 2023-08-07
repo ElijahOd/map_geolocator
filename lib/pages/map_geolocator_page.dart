@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../cubit/location_cubit.dart';
 import '../features/copy_coordinate.dart';
-import '../features/map_view.dart';
 import '../permissions/location_permission.dart';
-import '../providers/location_provider.dart';
 
 class MapGeolocatorPage extends StatelessWidget {
   const MapGeolocatorPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final locationProvider = Provider.of<LocationProvider>(context);
+    final locationProvider = Provider.of<LocationCubit>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -37,8 +36,6 @@ class MapGeolocatorPage extends StatelessWidget {
               ),
             const SizedBox(height: 20),
             const CopyCoordinate(),
-            const SizedBox(height: 20),
-            //const MapView(),
           ],
         ),
       ),
